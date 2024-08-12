@@ -34,9 +34,6 @@ jobs:
       id-token: write
 
     steps:
-      - name: Get current date
-        id: date
-        run: echo "date=$(date +'%s')" >> $GITHUB_OUTPUT
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -94,7 +91,7 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         env:
           # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
-          TAGS: ${{ steps.meta.outputs.tags }}-${{ steps.date.outputs.date }}
+          TAGS: ${{ steps.meta.outputs.tags }}-${{ github.event.repository.updated_at}}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
